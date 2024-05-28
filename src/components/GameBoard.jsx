@@ -1,21 +1,16 @@
-import {useState} from "react";
-
 const initialBoard = [
   [null, null, null],
   [null, null, null],
   [null, null, null],
 ];
 
-export default function GameBoard({activePlayer, handleTurn}) {
-  const [board, setBoard] = useState(initialBoard);
+export default function GameBoard({turns, handleTurn}) {
+  let board = initialBoard;
 
-  function handleClick(rowIndex, colIndex) {
-    setBoard((prev) => {
-      const newState = [...prev.map((inner) => [...inner])];
-      newState[rowIndex][colIndex] = activePlayer;
-      return newState;
-    });
-    handleTurn();
+  for (const turn of turns) {
+    const {box, player} = turn;
+    const {row, col} = box;
+    board[row][col] = player;
   }
 
   return (
@@ -25,7 +20,7 @@ export default function GameBoard({activePlayer, handleTurn}) {
           <ol>
             {row.map((col, cIdx) => (
               <li key={cIdx}>
-                <button onClick={() => handleClick(rIdx, cIdx)}>{col}</button>
+                <button onClick={() => handleTurn(rIdx, cIdx)}>{col}</button>
               </li>
             ))}
           </ol>
